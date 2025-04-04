@@ -7,7 +7,7 @@ exports.Auth = async (req, res, next) => {
         const token = req.cookies.token || 
                       req.body.token || 
                       req.header("Authorization")?.replace("Bearer ", "");
-
+                      console.log("Received Token:", token);
         if (!token) {
             return res.status(401).json({
                 success: false,
@@ -16,13 +16,15 @@ exports.Auth = async (req, res, next) => {
         }
 
         try {
-            // Verify token
+          
             const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
             console.log("Decoded Token:", decoded);
 
-            // Attach user data to request object
-            req.user = decoded;
-            next(); // Proceed to next middleware
+            
+            // req.user = decoded;
+            req.user = { userId: decoded.userId || decoded.id || decoded._id };
+
+            next(); 
         } catch (error) {
             return res.status(401).json({
                 success: false,

@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ props }) => {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export const AuthProvider = ({ props }) => {
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
-      {props.children}
+      {children}
     </AuthContext.Provider>
   );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import constellation from '../assets/const2.jpg';
-import Logo from '../../Components/Logo';
+import Logo from '../Components/Logo';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
 function Home() {

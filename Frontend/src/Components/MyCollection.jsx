@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import Logo2 from './Logo2';
-import img from '../public/constellation.jpg';
+import img from '../../public/constellation.jpg';
 
 function MyCollection() {
   const [constellations, setConstellations] = useState([]);
@@ -14,7 +14,6 @@ function MyCollection() {
   useEffect(() => {
     const fetchUserConstellationData = async () => {
       try {
-        // Retrieve token
         const token = localStorage.getItem('token');
         if (!token) {
           setError('No token found, redirecting to login...');
@@ -23,7 +22,11 @@ function MyCollection() {
           return;
         }
         const decodedToken = jwtDecode(token);
-        const userId = decodedToken._id; 
+        console.log("decodedToken" , decodedToken);
+        
+        
+        const userId = decodedToken.id || decodedToken._id;
+        
 
         if (!userId) {
           setError('Invalid token. Please log in again.');
@@ -40,7 +43,7 @@ function MyCollection() {
           setError(response.data.message);
         }
       } catch (err) {
-        setError('Failed to fetch constellation data');
+        setError('Sorry! No constellation found :)');
         console.error(err);
       } finally {
         setLoading(false);
@@ -68,23 +71,18 @@ function MyCollection() {
       <section className="bg-gray-300 p-4 h-full rounded-lg shadow-lg mt-10">
         <ul className="flex flex-wrap justify-center gap-4">
           {constellations.map((constellation) => {
-            const { _id, name, story, meaning, userId } = constellation;
+            const { userId, name, story, meaning } = constellation;
             return (
-              <li
-                key={_id}
+               <li
+                key={userId}
                 className="w-full sm:w-1/2 md:w-1/2 lg:w-1/3 p-4 bg-black shadow-md rounded-lg border border-zinc-100 transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 <p className="text-gray-200 font-bold text-lg"> Name: {name}</p>
                 <p className="text-gray-300 italic mt-1"> Meaning: {meaning}</p>
                 <p className="text-gray-400 mt-2"> Story: {story}</p>
                 
-                {/* Display user information */}
-                {userId && (
-                  <div className="text-gray-500 mt-2">
-                    <p>Created by: <strong>{userId.name}</strong></p>
-                    <p>Email: {userId.email}</p>
-                  </div>
-                )}
+              
+                
 
                 <img alt="constellation" src={img} className="w-100 h-50 rounded-lg mt-2" />
 
